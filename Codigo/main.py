@@ -186,7 +186,9 @@ class BD:
             # Construir la ruta completa al archivo
             file_path = os.path.join(source_folder, file_name)
 
-            nom = self.selecionar_cancion(file_name.replace(".mp3", ""))
+            num = file_name.replace(".mp3", "")
+
+            nom = self.selecionar_cancion(num)
 
             # Leer el archivo MP3 en formato binario
             with open(file_path, 'rb') as mp3_file:
@@ -196,7 +198,7 @@ class BD:
 
             try:
                 # Realizar la solicitud POST
-                data, count = self.supabase.table('tabla_mp3').insert({"nombre_archivo": nom, 
+                data, count = self.supabase.table('tabla_mp3').insert({"id":num,"nombre_archivo": nom, 
                                                                 "archivo_mp3" : mp3_base64_str}).execute()
 
             except Exception as e:
