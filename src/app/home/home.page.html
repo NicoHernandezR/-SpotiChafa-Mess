@@ -6,8 +6,35 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-button (click)="playAudio()">Play</ion-button>
-  <ion-button (click)="pauseAudio()">Pause</ion-button>
-  <ion-button (click)="stopAudio()">Stop</ion-button>
+<ion-content>
+
+  <ion-button (click)="comprobar()" expand="block" fill="clear" shape="round">
+    comprobar
+  </ion-button>
+
+  <ion-footer>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <!-- Botón de previa con flecha a la izquierda -->
+        <ion-button >
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+  
+      <ion-buttons slot="primary">
+        <!-- Botón de reproducción/pausa en el centro -->
+        <ion-button (click)="reproducirOpausar()">
+          <ion-icon *ngIf="!reproduciendo" name="play-outline"></ion-icon>
+          <ion-icon *ngIf="reproduciendo" name="pause-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+  
+      <ion-buttons slot="end">
+        <!-- Botón de siguiente con flecha a la derecha -->
+        <ion-button (click)="siguienteCancion()">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>
 </ion-content>
