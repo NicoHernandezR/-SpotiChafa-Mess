@@ -8,6 +8,10 @@
 
 <ion-content>
 
+  <ion-button (click)="comprobar()" expand="block" fill="clear" shape="round">
+    Click me
+  </ion-button>
+
   <ion-grid>
     <ion-row class="ion-align-items-center ion-justify-content-center">
       <ion-col>
@@ -19,8 +23,20 @@
   </ion-grid>
 
   <ion-item>
-    <ion-label>Awesome Label</ion-label>
+    <ion-label class="scrollable-text"> {{titulo}} </ion-label>
   </ion-item>
+
+  <ion-item>
+    <ion-label slot="start"> {{progresoStr}} </ion-label>
+    <ion-label slot="end"> {{duracionStr}} </ion-label>
+  </ion-item>
+
+  <ion-progress-bar class="ion-padding"
+  [value]="progreso"
+  color="primary"
+  mode="md"
+  class="custom-progress-bar"
+></ion-progress-bar>
 
 </ion-content>
 
@@ -45,6 +61,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
 
 
 </ion-footer>

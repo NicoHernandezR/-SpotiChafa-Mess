@@ -63,3 +63,25 @@
   font-size: 100px; /* Ajusta el tamaño del ícono según tus preferencias */
   color: rgb(127, 208,255); /* Color del ícono */
 }
+
+@keyframes scrollText {
+  from {
+    transform: translateX(90%);
+  }
+  to {
+    transform: translateX(-90%);
+  }
+}
+
+.scrollable-text {
+  white-space: nowrap;
+  overflow: hidden;
+  animation: scrollText 10s linear infinite;
+}
+
+
+.custom-progress-bar {
+  --background: #e0e0e0; // Color de fondo de la barra
+  --buffer-background: #f2f2f2; // Color de fondo del buffer (si se usa)
+  --progress-background: #4caf50; // Color de fondo de la porción de progreso
+}
