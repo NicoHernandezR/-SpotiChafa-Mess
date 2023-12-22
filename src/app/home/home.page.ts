@@ -19,6 +19,18 @@ export class HomePage implements OnInit{
     this.supabase = createClient(environment.supaBaseUrl, environment.supaBaseKey);
   }
 
+  
+  mensaje: string = ''
+  prevSTR: string = 'prevBS64'
+  actSTR: string = 'actualBS64'
+  nextSTR: string = 'nextBS64'
+  player: Howl | undefined =  undefined;
+  totalSongs: number = 0
+  idActual: number = 2
+  reproduciendo: boolean = false
+  actual: any
+  prev: any
+  next: any
 
   ngOnInit(): void {
     this.getTotalSongs()
@@ -47,21 +59,12 @@ export class HomePage implements OnInit{
         data: data,
         directory: Directory.Data,
       });
-      console.log(`Archivo ${path} guardado correctamente`);
     } catch (error) {
       console.error(`Error al escribir en el archivo ${path}`, error);
       // Puedes manejar el error de otra manera según tus necesidades
     }
   }
 
-  mensaje: string = ''
-  prevSTR: string = 'prevBS64'
-  actSTR: string = 'actualBS64'
-  nextSTR: string = 'nextBS64'
-  player: Howl | undefined =  undefined;
-  totalSongs: number = 0
-  idActual: number = 2
-  reproduciendo: boolean = false
 
   async getTotalSongs(){
     const { data, error } = await this.supabase
@@ -149,6 +152,13 @@ export class HomePage implements OnInit{
     if(this.reproduciendo){
       this.player?.pause()
       this.reproduciendo = false
+      console.log(this.player?.seek())
+      return
+    }
+
+    if(this.player?.playing){
+      this.player?.play()
+      this.reproduciendo = true
       return
     }
 
@@ -173,6 +183,10 @@ export class HomePage implements OnInit{
     await this.escribirArchivo(this.actSTR, next)
 
     this.idActual = this.idActual + 1;
+    this.player?.stop()
+    this.player = undefined
+    this.reproduciendo = false
+    this.reproducirOpausar()
     this.cargarCancionNext()
     
   }
@@ -185,6 +199,10 @@ export class HomePage implements OnInit{
     await this.escribirArchivo(this.actSTR, prev)
 
     this.idActual = this.idActual - 1;
+    this.player?.stop()
+    this.player = undefined
+    this.reproduciendo = false
+    this.reproducirOpausar()
     this.cargcarCancionPrevia()
   }
 

@@ -8,33 +8,43 @@
 
 <ion-content>
 
-  <ion-button (click)="comprobar()" expand="block" fill="clear" shape="round">
-    comprobar
-  </ion-button>
+  <ion-grid>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col>
+        <div class="contenedor-cuadrado">
+          <ion-icon name="musical-notes-outline" class="icono"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <ion-footer>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <!-- Botón de previa con flecha a la izquierda -->
-        <ion-button >
-          <ion-icon name="chevron-back-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-  
-      <ion-buttons slot="primary">
-        <!-- Botón de reproducción/pausa en el centro -->
-        <ion-button (click)="reproducirOpausar()">
-          <ion-icon *ngIf="!reproduciendo" name="play-outline"></ion-icon>
-          <ion-icon *ngIf="reproduciendo" name="pause-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-  
-      <ion-buttons slot="end">
-        <!-- Botón de siguiente con flecha a la derecha -->
-        <ion-button (click)="siguienteCancion()">
-          <ion-icon name="chevron-forward-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-footer>
+  <ion-item>
+    <ion-label>Awesome Label</ion-label>
+  </ion-item>
+
 </ion-content>
+
+<ion-footer>
+  <ion-grid style="padding-bottom: 20%;">
+    <ion-row>
+      <ion-col class="col_reproductor">
+        <ion-button (click)="previaCancion()" fill="clear" shape="round">
+          <ion-icon name="play-skip-back-outline"class="left_right_icon"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col style="text-align: center;">
+        <ion-button (click)="reproducirOpausar()" fill="clear" shape="round">
+          <ion-icon class="play_button" *ngIf="!reproduciendo" name="play-circle"></ion-icon>
+          <ion-icon class="play_button" *ngIf="reproduciendo" name="pause-circle"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col class="col_reproductor">
+        <ion-button (click)="siguienteCancion()" fill="clear" shape="round"> 
+          <ion-icon name="play-skip-forward-outline" class="left_right_icon"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+</ion-footer>

@@ -30,3 +30,36 @@
   max-width: 0px !important;
   display: none !important;
 }
+
+.left_right_icon, .play_button{
+  color:var(--ion-color-dark);
+}
+
+.left_right_icon{
+  font-size: 6.5vh !important;
+}
+
+.play_button{
+  font-size: 7.5vh !important;
+}
+.centrar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor-cuadrado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 92.5vw; /* Ancho total de la pantalla menos 5 píxeles */
+  background-color: rgb(0, 74, 119); /* Color azul, puedes cambiarlo según tus preferencias */
+  border-radius: 15px; /* Bordes redondeados */
+  aspect-ratio: 1/1; /* Hace que la relación de aspecto sea 1:1 (height igual al width) */
+  margin: auto; /* Añade margen automático para centrar horizontalmente */
+}
+
+.icono {
+  font-size: 100px; /* Ajusta el tamaño del ícono según tus preferencias */
+  color: rgb(127, 208,255); /* Color del ícono */
+}
