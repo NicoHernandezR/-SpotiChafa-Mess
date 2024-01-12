@@ -207,7 +207,9 @@ class BD:
 
             try:
                 # Realizar la solicitud POST
-                data, count = self.supabase.table('tabla_mp3').insert({"id":num,"nombre_archivo": nom}
+                res = self.supabase.storage.from_('mp3').create_signed_url(f'mp3/{num}', 31530000)
+                data, count = self.supabase.table('tabla_mp3').insert({"id":num,"nombre_archivo": nom,
+                                                                       "url": res['signedURL']}
                                                                 ).execute()
 
             except Exception as e:
@@ -218,4 +220,4 @@ class BD:
 if __name__ == "__main__":
 
     bd = BD()
-    bd.hacer_todo_el_insert('https://www.youtube.com/playlist?list=PLyHdxlKXBjjnAQ4tcta35jkaFKLosZIJ-', 50)
+    bd.hacer_todo_el_insert('https://www.youtube.com/playlist?list=PLyHdxlKXBjjnAQ4tcta35jkaFKLosZIJ-', 20)
