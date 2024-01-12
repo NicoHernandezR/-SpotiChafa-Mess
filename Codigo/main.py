@@ -19,6 +19,7 @@ class BD:
         self.cursor = None
         self.abrir_conexion()
         self.cursor = self.conn.cursor()
+        self.borrar_canciones()
         self.crear_tabla_cancion()
         self.crear_tabla_playlist()
         self.crear_tabla_current_pl()
@@ -32,6 +33,7 @@ class BD:
 
     def hacer_commit(self):
         self.conn.commit()
+
     def ejecutar_query(self, query, par=None):
         if par == None:
             self.cursor.execute(query)
@@ -92,6 +94,7 @@ class BD:
         self.ejecutar_query(query)
         pl = self.cursor.fetchone()
         return pl[0] if pl else None
+    
     def selecionar_cancion(self,id):
         query = f'SELECT nombre, artista FROM cancion WHERE id = {id}'
         self.ejecutar_query(query)
@@ -123,7 +126,9 @@ class BD:
     def borrar_canciones(self):
         query = 'DROP TABLE IF EXISTS cancion'
         self.ejecutar_query(query)
-        shutil.rmtree("canciones")
+        if os.path.exists("canciones"):
+            shutil.rmtree("canciones")
+
 
     def borrar_current_pl(self):
         query = 'DELETE FROM current_pl'
@@ -171,10 +176,16 @@ class BD:
         
         self.vaciar_tabla_supabase()
         self.subir_a_supabase()
+
     def vaciar_tabla_supabase(self):
             try:
                 # Realizar la solicitud POST
+                data,count = self.supabase.table('tabla_mp3').select('count').execute()
+                total = data[1][0]['count']
+                lista_eliminar = ['mp3/{}'.format(i) for i in range(1, total + 1)]
+                res = self.supabase.storage.from_('mp3').remove(lista_eliminar)
                 data, count = self.supabase.table('tabla_mp3').delete().gt('id', 0).execute()
+                
             except Exception as e:
                 print(f'Error al procesar: {str(e)}')
 
@@ -192,23 +203,19 @@ class BD:
 
             # Leer el archivo MP3 en formato binario
             with open(file_path, 'rb') as mp3_file:
-                mp3_binary = mp3_file.read()
-
-            mp3_base64_str = base64.b64encode(mp3_binary).decode('utf-8')
+                self.supabase.storage.from_("mp3").upload(file=mp3_file,path=f'mp3/{num}', file_options={"content-type": "audio/mpeg"})
 
             try:
                 # Realizar la solicitud POST
-                data, count = self.supabase.table('tabla_mp3').insert({"id":num,"nombre_archivo": nom, 
-                                                                "archivo_mp3" : mp3_base64_str}).execute()
+                data, count = self.supabase.table('tabla_mp3').insert({"id":num,"nombre_archivo": nom}
+                                                                ).execute()
 
             except Exception as e:
                 print(f'Error al procesar {file_name}: {str(e)}')
     
         self.borrar_canciones()
 
-
-
 if __name__ == "__main__":
 
     bd = BD()
-    bd.hacer_todo_el_insert('https://www.youtube.com/playlist?list=PLyHdxlKXBjjnAQ4tcta35jkaFKLosZIJ-', 5)
+    bd.hacer_todo_el_insert('https://www.youtube.com/playlist?list=PLyHdxlKXBjjnAQ4tcta35jkaFKLosZIJ-', 50)
