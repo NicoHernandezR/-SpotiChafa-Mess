@@ -99,7 +99,7 @@ class BD:
         query = f'SELECT nombre, artista FROM cancion WHERE id = {id}'
         self.ejecutar_query(query)
         cancion = self.cursor.fetchall()
-        return cancion[0][0]
+        return cancion[0]
     
     def seleccionar_id_cancion(self, nom, art):
         query = 'SELECT id FROM cancion WHERE nombre = ? AND artista = ?'
@@ -199,7 +199,7 @@ class BD:
 
             num = file_name.replace(".mp3", "")
 
-            nom = self.selecionar_cancion(num)
+            titulo, artista = self.selecionar_cancion(num)
 
             # Leer el archivo MP3 en formato binario
             with open(file_path, 'rb') as mp3_file:
@@ -208,7 +208,7 @@ class BD:
             try:
                 # Realizar la solicitud POST
                 res = self.supabase.storage.from_('mp3').create_signed_url(f'mp3/{num}', 31530000)
-                data, count = self.supabase.table('tabla_mp3').insert({"id":num,"nombre_archivo": nom,
+                data, count = self.supabase.table('tabla_mp3').insert({"id":num,"title": titulo,'artist': artista,
                                                                        "url": res['signedURL']}
                                                                 ).execute()
 
