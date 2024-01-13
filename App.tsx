@@ -1,45 +1,16 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import ImageSong from './components/ImageSong';
-import SongDetails from './components/SongDetails';
-import SongTimeStamp from './components/SongTimeStamp';
+import { View } from 'react-native';
 import { StatusBar } from 'react-native';
-import SongSlider from './components/SongSlider';
-import SongControls from './components/SongControls';
+import MusicPlayer from './components/MusicPlayer';
+import stylesNormales from './styles/StylesNormal';
 
 const App = () => {
   return (
-    <View style={styles.container}>
+    <View style={stylesNormales.container}>
       <StatusBar barStyle="light-content" />
-      <ImageSong />
-      <SongDetails />
-      <SongSlider />
-      <SongTimeStamp />
-      <SongControls />
+      <MusicPlayer />
     </View>
   );
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 30,
-    backgroundColor: 'black',
-  },
-  center: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  viewText: {
-    padding: 10,
-  },
-  text: {
-    color: 'white',
-    marginHorizontal: 20,
-    overflow: 'hidden',
-  },
-});

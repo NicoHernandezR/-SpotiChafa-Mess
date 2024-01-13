@@ -1,22 +1,24 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
-import stylesNormales from '../styles/StylesNormal';
+import TrackPlayer from 'react-native-track-player';
 
-const SongSlider = () => {
+const SongSlider = (props: { progress: { position: number | undefined; duration: number | undefined; }; }) => {
   return (
-    <View style={stylesNormales.center} >
+    <>
       <Slider
         style={style.progressBar}
-        value={10}
+        value={props.progress.position}
         minimumValue={0}
-        maximumValue={100}
+        maximumValue={props.progress.duration}
         thumbTintColor="#FFD369"
         minimumTrackTintColor="#FFD369"
         maximumTrackTintColor="#fff"
-        onSlidingComplete ={() => {}}
+        onSlidingComplete={async value => {
+          await TrackPlayer.seekTo(value);
+        }}
       />
-    </View>
+    </>
   );
 };
 

@@ -3,14 +3,17 @@ import React from 'react';
 import stylesText from '../styles/StylesText';
 import stylesNormales from '../styles/StylesNormal';
 
-const SongDetails = () => {
+const SongDetails = (props: {
+  title: string | undefined;
+  artist: string | undefined;
+}) => {
   return (
     <View style={[stylesText.viewText, stylesNormales.center]}>
       <Text numberOfLines={1} ellipsizeMode="tail" style={stylesText.text}>
-        Nombre de la cancion
+        {props.title || 'Titulo'}
       </Text>
       <Text numberOfLines={1} ellipsizeMode="tail" style={stylesText.text}>
-        Artista
+        {props.artist || 'Artista'}
       </Text>
     </View>
   );
