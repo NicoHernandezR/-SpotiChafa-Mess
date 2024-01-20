@@ -3,11 +3,11 @@ import { StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
 import TrackPlayer from 'react-native-track-player';
 
-const SongSlider = (props: { progress: { position: number | undefined; duration: number | undefined; }; }) => {
+const SongSlider = props => {
   return (
     <>
       <Slider
-        style={style.progressBar}
+        style={[style.progressBar, props.style]}
         value={props.progress.position}
         minimumValue={0}
         maximumValue={props.progress.duration}
@@ -28,7 +28,6 @@ const style = StyleSheet.create({
   progressBar: {
     width: 350,
     height: 40,
-    marginTop: 20,
     flexDirection: 'row',
   },
 });

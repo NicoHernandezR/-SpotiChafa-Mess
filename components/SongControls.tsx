@@ -2,25 +2,21 @@ import { View, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { State } from 'react-native-track-player';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
+import { togglePlayBack, skipToNext, skipToPrev } from '../functions/player';
 
-const SongControls = (props: {
-  press: (arg0: any) => void;
-  state: { state: any };
-  next: any;
-  prev: any;
-}) => {
+const SongControls = props => {
   return (
-    <View style={styles.musicControlContainer}>
+    <View style={[styles.musicControlContainer, props.style]}>
       <Pressable
         onPress={() => {
-          props.prev();
+          skipToPrev();
         }}>
         <Ionicons name="play-skip-back-outline" size={35} color="#FFD369" />
       </Pressable>
 
       <TouchableOpacity
         onPress={() => {
-          props.press(props.state.state);
+          togglePlayBack(props.state.state);
         }}>
         <Ionicons
           name={
@@ -33,7 +29,7 @@ const SongControls = (props: {
 
       <Pressable
         onPress={() => {
-          props.next();
+          skipToNext();
         }}>
         <Ionicons name="play-skip-forward-outline" size={35} color="#FFD369" />
       </Pressable>
@@ -49,7 +45,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '75%',
-    marginTop: 25,
-    marginBottom: 60,
   },
 });

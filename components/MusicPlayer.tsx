@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import stylesNormales from '../styles/StylesNormal';
 import React, { useEffect, useState } from 'react';
 import ImageSong from './ImageSong';
@@ -13,25 +13,12 @@ import TrackPlayer, {
   Event,
   useTrackPlayerEvents,
   useProgress,
-  State,
   usePlaybackState,
   RepeatMode,
   Capability,
 } from 'react-native-track-player';
 
-const togglePlayBack = async (playBackState: State | undefined) => {
-  const currentTrack = await TrackPlayer.getActiveTrack();
-  if (currentTrack == null) {
-    return;
-  }
-  if (playBackState === State.Paused || playBackState === State.Ready) {
-    await TrackPlayer.play();
-  } else {
-    await TrackPlayer.pause();
-  }
-};
-
-const MusicPlayer = props => {
+const MusicPlayer = (props: { route: { params: { id: number } } }) => {
   const [current, setCurrent] = useState<Track>();
   const [primeraVez, setPrimeraVez] = useState(false);
   const progress = useProgress();
@@ -73,37 +60,27 @@ const MusicPlayer = props => {
   const setUpPlayer = async () => {
     try {
       await TrackPlayer.setupPlayer();
+      await TrackPlayer.reset();
+      await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+      await TrackPlayer.updateOptions({
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+          Capability.Stop,
+        ],
+      });
+      await obtenerQueue();
     } catch (e) {
       console.log(e);
     }
-    await TrackPlayer.reset();
-    await TrackPlayer.setRepeatMode(RepeatMode.Queue);
-    await TrackPlayer.updateOptions({
-      capabilities: [
-        Capability.Play,
-        Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
-        Capability.Stop,
-      ],
-    });
-    await obtenerQueue();
 
     if (props.route) {
       await cambiarSongIndex();
     } else {
       await obtenerCurrent();
     }
-  };
-
-  const skipToNext = async () => {
-    await TrackPlayer.skipToNext();
-    await obtenerCurrent();
-  };
-
-  const skipToPrev = async () => {
-    await TrackPlayer.skipToPrevious();
-    await obtenerCurrent();
   };
 
   const obtenerCurrent = async () => {
@@ -113,10 +90,6 @@ const MusicPlayer = props => {
 
   const cambiarSongIndex = async () => {
     const id = props.route.params.id - 1;
-    console.log(id);
-    console.log(await TrackPlayer.getTrack(id));
-    console.log('==================');
-
     if (id === 0) {
       await obtenerCurrent();
     } else {
@@ -125,14 +98,11 @@ const MusicPlayer = props => {
   };
 
   useEffect(() => {
-    if (primeraVez) {
-      return;
-    }
     setUpPlayer();
     setPrimeraVez(true);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [primeraVez]);
+  }, []);
 
   const cargarTrackPlayerCurrent = async () => {
     await TrackPlayer.play();
@@ -143,19 +113,26 @@ const MusicPlayer = props => {
   }, [current]);
 
   return (
-    <View style={stylesNormales.container}>
+    <View style={[stylesNormales.container, styles.marginContainer]}>
       <ImageSong />
       <SongDetails title={current?.title} artist={current?.artist} />
-      <SongSlider progress={progress} />
+      <SongSlider progress={progress} style={styles.sliderMargin} />
       <SongTimeStamp progress={progress} />
-      <SongControls
-        press={togglePlayBack}
-        state={playBackState}
-        next={skipToNext}
-        prev={skipToPrev}
-      />
+      <SongControls state={playBackState} style={styles.controlsMargin} />
     </View>
   );
 };
 
 export default MusicPlayer;
+
+const styles = StyleSheet.create({
+  marginContainer: {
+    marginBottom: 60,
+  },
+  sliderMargin: {
+    marginTop: 20,
+  },
+  controlsMargin: {
+    marginTop: 25,
+  },
+});
