@@ -5,7 +5,7 @@ import React from 'react';
 
 const ImageSong = () => {
   return (
-    <View style={stylesNormales.center}>
+    <View style={[stylesNormales.center]}>
       <View style={styles.viewIcon}>
         <MaterialIcons style={styles.icon} name="library-music" />
       </View>
@@ -28,5 +28,10 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 100,
     color: 'rgb(127, 208,255)',
+  },
+  touchables: {
+    marginTop: 30,
+    width: '50%',
+    height: '100%',
   },
 });

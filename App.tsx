@@ -1,15 +1,24 @@
 import React from 'react';
-import { View } from 'react-native';
-import { StatusBar } from 'react-native';
-import MusicPlayer from './components/MusicPlayer';
-import stylesNormales from './styles/StylesNormal';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MusicApp from './components/MusicApp';
+import MusicList from './components/MusicList';
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <View style={stylesNormales.container}>
-      <StatusBar barStyle="light-content" />
-      <MusicPlayer />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          statusBarHidden: false,
+          headerShown: false,
+        }}>
+        <Stack.Screen name="ListaSongs" component={MusicList} />
+        <Stack.Screen name="MusicPlayer" component={MusicApp} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

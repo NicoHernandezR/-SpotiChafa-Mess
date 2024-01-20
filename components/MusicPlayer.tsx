@@ -6,7 +6,6 @@ import SongDetails from './SongDetails';
 import SongTimeStamp from './SongTimeStamp';
 import SongSlider from './SongSlider';
 import SongControls from './SongControls';
-import Song from '../interface/song';
 import { createClient } from '@supabase/supabase-js';
 import 'react-native-url-polyfill/auto';
 import TrackPlayer, {
@@ -32,13 +31,9 @@ const togglePlayBack = async (playBackState: State | undefined) => {
   }
 };
 
-const MusicPlayer = () => {
+const MusicPlayer = props => {
   const [current, setCurrent] = useState<Track>();
-  const [currentQueue, setCurrentQueue] = useState<Song[]>();
-  const [currentId, setCurrentId] = useState(0);
-  const [totalSongs, setTotalSongs] = useState(0);
   const [primeraVez, setPrimeraVez] = useState(false);
-  const [nextOrPrev, setNextOrPrev] = useState(true);
   const progress = useProgress();
   const playBackState = usePlaybackState();
 
@@ -58,30 +53,18 @@ const MusicPlayer = () => {
     }
 
     const nextTrack = await TrackPlayer.getActiveTrack();
-    const nextId = await TrackPlayer.getActiveTrackIndex();
 
     setCurrent(nextTrack);
-    if (nextId) {
-      setCurrentId(nextId);
-    }
   });
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-  const obtenerTotalSongs = async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { data, error } = await supabase.from('tabla_mp3').select('count');
-
-    if (data && data.length > 0) {
-      setTotalSongs(data[0].count);
-    }
-  };
 
   const obtenerQueue = async () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, error } = await supabase
       .from('tabla_mp3')
-      .select('title, artist, url');
+      .select('title, artist, url')
+      .order('id');
     if (data) {
       await TrackPlayer.add(data);
     }
@@ -90,21 +73,26 @@ const MusicPlayer = () => {
   const setUpPlayer = async () => {
     try {
       await TrackPlayer.setupPlayer();
-      await TrackPlayer.reset();
-      await TrackPlayer.setRepeatMode(RepeatMode.Queue);
-      await TrackPlayer.updateOptions({
-        capabilities: [
-          Capability.Play,
-          Capability.Pause,
-          Capability.SkipToNext,
-          Capability.SkipToPrevious,
-          Capability.Stop,
-        ],
-      });
-      await obtenerQueue();
-      await obtenerCurrent();
     } catch (e) {
       console.log(e);
+    }
+    await TrackPlayer.reset();
+    await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+    await TrackPlayer.updateOptions({
+      capabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.SkipToNext,
+        Capability.SkipToPrevious,
+        Capability.Stop,
+      ],
+    });
+    await obtenerQueue();
+
+    if (props.route) {
+      await cambiarSongIndex();
+    } else {
+      await obtenerCurrent();
     }
   };
 
@@ -123,12 +111,24 @@ const MusicPlayer = () => {
     setCurrent(cur);
   };
 
+  const cambiarSongIndex = async () => {
+    const id = props.route.params.id - 1;
+    console.log(id);
+    console.log(await TrackPlayer.getTrack(id));
+    console.log('==================');
+
+    if (id === 0) {
+      await obtenerCurrent();
+    } else {
+      await TrackPlayer.skip(id);
+    }
+  };
+
   useEffect(() => {
     if (primeraVez) {
       return;
     }
     setUpPlayer();
-    obtenerTotalSongs();
     setPrimeraVez(true);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
