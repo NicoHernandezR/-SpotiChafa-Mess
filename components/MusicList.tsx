@@ -18,10 +18,8 @@ const MusicList = ({ navigation }) => {
   const progress = useProgress();
   const [current, setCurrent] = useState<Track>();
 
-  const supabaseUrl = 'https://iebaeflhlyvezpyioeqn.supabase.co';
-  const supabaseAnonKey =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllYmFlZmxobHl2ZXpweWlvZXFuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMDI1MzIyNiwiZXhwIjoyMDE1ODI5MjI2fQ.Ju7AJzwn_zCEPVYOEaTj3K_amSp6onP8LHRgmaqx8ig';
-
+  const supabaseUrl = '';
+  const supabaseAnonKey = "";
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(
       'Las variables de entorno SUPABASE_URL y SUPABASE_ANON_KEY deben estar definidas',
